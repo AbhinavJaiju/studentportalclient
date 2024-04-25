@@ -17,18 +17,21 @@ const SignUp = () => {
 
 
   const signUp = async () => {
+    setStudentSlug(`${firstname}_${lastname}`)
+    console.log(typeof(parseInt(contactNumber)));
     try {
       setIsLoading(true);
       const response = await axios({
         method: 'POST',
         url: API_ROUTES.SIGN_UP,
         data: {
-          email,
+          email_Id: email,
+          studentSlug:`${firstname}_${lastname}`,
+          studentId:parseInt(contactNumber.slice(-4)),
           password,
           firstname,
           lastname, 
-          contactNumber,
-
+          contactNumber:parseInt(contactNumber)
         }
       });
       if (!response?.data?.token) {
@@ -81,10 +84,10 @@ const SignUp = () => {
           />
            <input
             className="border-2 outline-none p-2 rounded-md"
-            type="email"
-            placeholder="Enter Your Email"
-            value={email}
-            onChange={(e) => { setEmail(e.target.value); }}
+            type="number"
+            placeholder="Enter you Contact Number"
+            value={contactNumber}
+            onChange={(e) => { setContantNumber(e.target.value); }}
           />
 
           <button

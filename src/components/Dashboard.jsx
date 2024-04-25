@@ -20,14 +20,21 @@ const Dashboard = () => {
           <div className="text-lg text-bold mb-2"> User Details </div>
           <div className="flex">
             <div className="w-24 font-medium">
-              <div> Email : </div>
-              <div> Firstname : </div>
-              <div> Lastname : </div>
             </div>
             <div>
-              <div> {user.email} </div>
-              <div> {user.firstname} </div>
-              <div> {user.lastname} </div>
+              {/* <div>Email:{user.email} </div> */}
+              <div> firstName:{user.firstname} </div>
+              <div>lastName: {user.lastname} </div>
+              <div>emailId: {user.email_Id} </div>
+              <div>ContactNumber: {user.contactNumber} </div>
+              <div>Nationality: {user.nationality} </div>
+              {user.subjects_picked.map((item,index)=>
+                <div key={index}>
+                  <div>Subject Name: {item.subjectName} </div>
+                  <div>Subject Date:{item.chosenSubjectDate[0].subjectDateAndTime[0]} </div>
+                </div>
+              )}
+            {console.log(user)}
             </div>
           </div>
         </div>
