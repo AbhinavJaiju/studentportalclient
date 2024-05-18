@@ -61,21 +61,27 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="p-16 bg-gray-800 h-screen">
-      <div className="text-2xl mb-4 font-bold text-white"> Dashboard </div>
+<div className="p-16 bg-gray-800 h-screen">
+      <div className="text-4xl mb-8 font-bold text-white">Dashboard</div>
       {user && (
-        <div className="text-white">
-          <div className="text-lg text-bold mb-2"> User Details </div>
-          <div className="flex">
-            <div className="w-24 font-medium"></div>
-            <div>
-              {/* <div>Email:{user.email} </div> */}
-              <div> firstName:{user.firstname} </div>
-              <div>lastName: {user.lastname} </div>
-              <div>emailId: {user.email_Id} </div>
-              <div>ContactNumber: {user.contactNumber} </div>
-              <div>Nationality: {user.nationality} </div>
-
+        <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="px-6 py-4">
+            <div className="text-xl font-bold text-gray-900 mb-4">User Details</div>
+            <div className="text-gray-700 text-base">
+              <div class="card shadow-sm">
+          <div class="card-header bg-transparent text-center">
+            <img class="profile_img" src="https://placeimg.com/640/480/arch/any" alt=""/>
+            <h3>{user.firstname}</h3>
+          </div>
+          <div class="card-body">
+            <p class="mb-0"><strong class="pr-1">Student ID:</strong>{user.studentId}</p>
+            <p class="mb-0"><strong class="pr-1">Last Name:</strong>{user.lastname}</p>
+            <p class="mb-0"><strong class="pr-1">Email ID:</strong>{user.email_Id}</p>
+            <p class="mb-0"><strong class="pr-1">Contact Number:</strong> {user.contactNumber}</p>
+            <p class="mb-0"><strong class="pr-1">Nationality:</strong>{user.nationality}</p>
+            <p class="mb-0"><strong class="pr-1">Section:</strong>A</p>
+          </div>
+        </div>
               {console.log(user.timeTables[0].csv)}
 
               {headers && (
