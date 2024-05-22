@@ -1,50 +1,47 @@
-
 import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 import { API_ROUTES, APP_ROUTES } from '../utils/constants';
 import { Link, useNavigate } from 'react-router-dom';
-import { useUser } from '../lib/customHooks';
+import { useAdmin } from '../lib/customHooks';
 import { storeTokenInLocalStorage } from '../lib/common';
 
-const SignIn = () => {
-  const navigate = useNavigate();
-  const { user, authenticated } = useUser();
-  // if (user || authenticated) {
-  //   navigate(APP_ROUTES.DASHBOARD)
-  // }
+const AdminSignIn = () => {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+    const { user, authenticated } = useAdmin();
+    if (user || authenticated) {
+      navigate(APP_ROUTES.ADMIN_DASHBOARD)
+    }
 
-  const signIn = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios({
-        method: 'post',
-        url: API_ROUTES.SIGN_IN,
-        data: {
-          email,
-          password
+    const signIn = async () => {
+        try {
+          setIsLoading(true);
+          const response = await axios({
+            method: 'post',
+            url: API_ROUTES.ADMIN_SIGN_IN,
+            data: {
+              email,
+              password
+            }
+          });
+          if (!response?.data?.token) {
+            console.log('Something went wrong during signing in: ', response);
+            return;
+          }
+          storeTokenInLocalStorage(response.data.token);
+          navigate(APP_ROUTES.ADMIN_DASHBOARD)
         }
-      });
-      if (!response?.data?.token) {
-        console.log('Something went wrong during signing in: ', response);
-        return;
-      }
-      storeTokenInLocalStorage(response.data.token);
-      navigate(APP_ROUTES.DASHBOARD)
-    }
-    catch (err) {
-      console.log('Some error occured during signing in: ', err);
-    }
-    finally {
-      setIsLoading(false);
-    }
-  };
-
-
+        catch (err) {
+          console.log('Some error occured during signing in: ', err);
+        }
+        finally {
+          setIsLoading(false);
+        }
+      };
   return (
     <div className="w-full h-screen flex justify-center items-center bg-gray-800">
       <div className="w-1/2 h-1/2 shadow-lg rounded-md bg-white p-8 flex flex-col">
@@ -97,7 +94,7 @@ const SignIn = () => {
         </div>
       </div>
     </div >
-  );
+  )
 }
 
-export default SignIn;
+export default AdminSignIn

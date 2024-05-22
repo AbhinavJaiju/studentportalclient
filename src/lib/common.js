@@ -23,6 +23,31 @@ export async function getAuthenticatedUser() {
         Authorization: `Bearer ${token}`
       }
     });
+    console.log(response)
+    const { authenticated = false } = response.data;
+    return authenticated ? response.data : false;
+  }
+  catch (err) {
+    console.log('getAuthenticatedUser, Something Went Wrong', err);
+    return defaultReturnObject;
+  }
+}
+
+export async function getAuthenticatedAdmin() {
+  const defaultReturnObject = { authenticated: false, user: null };
+  try {
+    const token = getTokenFromLocalStorage();
+    if (!token) {
+      return defaultReturnObject;
+    }
+    const response = await axios({
+      method: 'GET',
+      url: API_ROUTES.GET_ADMIN,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log(response)
     const { authenticated = false } = response.data;
     return authenticated ? response.data : false;
   }
