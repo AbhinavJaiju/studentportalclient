@@ -15,13 +15,15 @@ const Dashboard = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [updateCount, setUpdateCount] = useState(0);
+  const [notices, setNotice] = useState();
 
-  console.log(user);
+  console.log('jullo',user);
   const [noticeCount, setNoticeCount] = useState(0);
 
   useEffect(() => {
     if (user && user.requests) {
       setNoticeCount(user.requests.length);
+      console.log('hello',user)
     }
     const fetchData = async () => {
       try {
@@ -49,8 +51,14 @@ const Dashboard = () => {
         console.error("Error fetching data:", error);
         setLoading(false);
       }
+      try {
+        const response = await axios.get(API_ROUTES.GET_NOTICE);
+        console.log(response.data);
+        setNotice(response.data);
+    } catch (err) {
+        console.error('Error fetching notices:', err);
+    }
     };
-
     fetchData();
   }, [user]);
 
@@ -237,6 +245,27 @@ const Dashboard = () => {
       <button type="button" onClick={signOut}>
         Sign Out
       </button>
+      <h2>Notice Board</h2>
+            <table className="notice-table">
+                <thead>
+                    <tr>
+                        {/* <th>ID</th>
+                        <th>Title</th>
+                        <th>Date</th> */}
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {notices.notice.map((notice) => (
+                        <tr key={notice.noticeId}>
+                            {/* <td>{notice.id}</td>
+                            <td>{notice.title}</td>
+                            <td>{notice.date}</td> */}
+                            <td>{notice.noticeDescription}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
     </div>
   );
 };

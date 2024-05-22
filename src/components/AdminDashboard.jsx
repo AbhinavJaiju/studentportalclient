@@ -3,6 +3,7 @@ import { useAdmin } from "../lib/customHooks";
 import "../styles/adminDashboard.module.css";
 import axios from "axios";
 import { API_ROUTES } from "../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [updateCount, setUpdateCount] = useState(0);
@@ -14,6 +15,8 @@ const AdminDashboard = () => {
   const [message, setMessage] = useState("");
   const [lastNotice, setLastNotice] = useState(null);
   const [toggleState, setToggleState] = useState(false); // Toggle state
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user && user.admin && user.admin.notices) {
@@ -126,6 +129,15 @@ const AdminDashboard = () => {
     };
     reader.readAsText(file);
   };
+
+  function signOut() {
+    // Clear token from localStorage
+    localStorage.removeItem("token");
+
+    // Redirect or perform any other necessary actions
+    // For example, redirect to a sign-in page
+    navigate('/signin');
+  }
 
   if (!user) {
     return <div>Loading...</div>;
@@ -276,6 +288,9 @@ const AdminDashboard = () => {
           ))}
         </tbody>
       </table>
+      <button type="button" onClick={signOut}>
+        Sign Out
+      </button>
     </div>
   );
 };

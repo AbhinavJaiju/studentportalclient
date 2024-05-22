@@ -9,6 +9,7 @@ export const API_ROUTES = {
   DELETE_NOTICE : `${API_URL}/delete`,
   UPDATE_NOTICE : `${API_URL}/update`,
   CREATE_REQUEST : `${API_URL}/request`,
+  GET_NOTICE : `${API_URL}/getnotice`,
 }
 
 export const APP_ROUTES = {
