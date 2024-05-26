@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAdmin } from "../lib/customHooks";
-import "../styles/adminDashboard.module.css";
+import styles from "../styles/adminDashboard.module.css";
 import axios from "axios";
 import { API_ROUTES } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import ModalComponent from "./ModalComponent";
 
 const AdminDashboard = () => {
   const [updateCount, setUpdateCount] = useState(0);
@@ -15,6 +16,18 @@ const AdminDashboard = () => {
   const [message, setMessage] = useState("");
   const [lastNotice, setLastNotice] = useState(null);
   const [toggleState, setToggleState] = useState(false); // Toggle state
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
+  const openModal = (student) => {
+    setSelectedStudent(student);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedStudent(null);
+  };
 
   const navigate = useNavigate();
 
@@ -53,12 +66,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleActive = async (noticeId) => {
-    // Implement the publish functionality here
-    console.log("Publish notice with ID:", noticeId);
-    // Example:
-    // await axios.post("/api/notices/publish", { noticeId });
-  };
 
   const handleDelete = async (noticeId, ID) => {
     console.log(ID);
@@ -98,36 +105,31 @@ const AdminDashboard = () => {
     setToggleState(!toggleState); // Toggle the state
   };
 
-  const parseCSV = (text) => {
-    const lines = text.split("\n");
-    const notices = lines.map((line) => {
-      const [noticeId, noticeDescription, active] = line.split(",");
-      return {
-        noticeId: parseInt(noticeId),
-        noticeDescription,
-        active: active === "true",
-      };
-    });
-    return notices;
-  };
+  const handleFormSubmit = async (formData) => {
+    const { dateTime, studentEmail, subject, subjectDateId } = formData;
+    console.log("Form Data:", formData);
+    console.log(dateTime);
 
-  const handleFileUpload = async (event, studentEmail) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const text = e.target.result;
-      const notices = parseCSV(text);
-      try {
-        await axios.post("/api/notices/bulk", { notices, studentEmail });
-        setMessage("Notices uploaded successfully!");
-        setUpdateCount((prevCount) => prevCount + 1);
-      } catch (error) {
-        setMessage("Failed to upload notices.");
-        console.error("Error uploading notices:", error);
+    try {
+      const response = await axios.post(API_ROUTES.CREATE_SUBJECT_DATE, {
+        subjectId: subjectDateId,
+        emailId: studentEmail,
+        subjectSlug: subject,
+        subjectDateTime: dateTime,
+      });
+      console.log("hello");
+      // Handle the response as needed
+      if (response.status === 201) {
+        console.log("Submission successful:", response.data);
+        // Perform any additional actions on success, e.g., show a success message, update state, etc.
+      } else {
+        console.error("Unexpected response:", response);
+        // Handle unexpected responses
       }
-    };
-    reader.readAsText(file);
+    } catch (error) {
+      console.error("Error during submission:", error);
+      // Handle the error appropriately, e.g., show an error message to the user
+    }
   };
 
   function signOut() {
@@ -136,7 +138,7 @@ const AdminDashboard = () => {
 
     // Redirect or perform any other necessary actions
     // For example, redirect to a sign-in page
-    navigate('/signin');
+    navigate("/signin");
   }
 
   if (!user) {
@@ -161,26 +163,30 @@ const AdminDashboard = () => {
         </p>
       </div>
 
-      <div className="student-details">
+      <div className={styles.studentDetails}>
         <h2>Student Details</h2>
         {user.admin.studentDetails.map((student, index) => (
-          <div key={index} className="student-card">
+          <div key={index} className={styles.studentCard}>
             <p>
               <strong>First Name:</strong> {student.firstname}
             </p>
             <p>
               <strong>Email:</strong> {student.email_Id}
             </p>
-            <div className="csv-upload">
-              <h3>Upload Notices for {student.firstname}</h3>
-              <input
-                type="file"
-                accept=".csv"
-                onChange={(event) => handleFileUpload(event, student.email_Id)}
-              />
+            <div className={styles.addTimetable}>
+              <h3>Add Timetable for {student.firstname}</h3>
+              <button onClick={() => openModal(student)}>Add Timetable</button>
             </div>
           </div>
         ))}
+        {selectedStudent && (
+          <ModalComponent
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            student={selectedStudent}
+            onSubmit={handleFormSubmit}
+          />
+        )}
       </div>
 
       <div className="notice-upload">

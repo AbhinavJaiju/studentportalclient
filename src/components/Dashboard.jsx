@@ -5,9 +5,10 @@ import Papa from "papaparse";
 import axios from "axios";
 import { API_ROUTES } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import NoticeBoard from "./NoticeBoard";
+import SubjectCalendar from "./CalenderComponent";
 
 const Dashboard = () => {
-
   const navigate = useNavigate();
   const { user, authenticated } = useUser();
   const [data, setData] = useState([]);
@@ -17,47 +18,24 @@ const Dashboard = () => {
   const [updateCount, setUpdateCount] = useState(0);
   const [notices, setNotice] = useState();
 
-  console.log('jullo',user);
+  console.log("jullo", user);
   const [noticeCount, setNoticeCount] = useState(0);
 
   useEffect(() => {
     if (user && user.requests) {
       setNoticeCount(user.requests.length);
-      console.log('hello',user)
+      console.log("hello", user);
     }
     const fetchData = async () => {
-      try {
-        const response = await fetch(user.timeTables[0].csv.url);
-        const blob = await response.blob();
-
-        const blobUrl = URL.createObjectURL(blob);
-
-        Papa.parse(blobUrl, {
-          download: true,
-          header: true,
-          complete: (result) => {
-            console.log(result.data);
-            setData(result.data);
-            setLoading(false);
-          },
-          error: (error) => {
-            console.error("Error parsing CSV:", error);
-            setLoading(false);
-          },
-        });
-
-        URL.revokeObjectURL(blobUrl);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
       try {
         const response = await axios.get(API_ROUTES.GET_NOTICE);
         console.log(response.data);
         setNotice(response.data);
-    } catch (err) {
-        console.error('Error fetching notices:', err);
-    }
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching notices:", err);
+        setLoading(false);
+      }
     };
     fetchData();
   }, [user]);
@@ -106,18 +84,17 @@ const Dashboard = () => {
 
     // Redirect or perform any other necessary actions
     // For example, redirect to a sign-in page
-    navigate('/signin');
+    navigate("/signin");
   }
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (data.length === 0) {
+  if (user.length === 0) {
     return <div>No data available</div>;
   }
 
-  const headers = Object.keys(data[0]);
   console.log(authenticated);
   if (!user || !authenticated) {
     return (
@@ -130,6 +107,8 @@ const Dashboard = () => {
 
   return (
     <div className="p-16 bg-gray-800 h-screen">
+      {notices &&
+        notices.notice.map((notice) => <NoticeBoard notices={notice} />)}
       <div className="text-4xl mb-8 font-bold text-white">Dashboard</div>
       {user && (
         <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden">
@@ -173,45 +152,12 @@ const Dashboard = () => {
                   </p>
                 </div>
               </div>
-              {console.log(user.timeTables[0].csv)}
-
-              {headers && (
                 <div className="p-4 bg-blue-100 min-h-screen">
                   <h2 className="text-2xl font-bold mb-4 text-gray-800">
                     TimeTable
                   </h2>
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white shadow-md rounded-lg">
-                      <thead className="bg-blue-500 text-white">
-                        <tr>
-                          {headers.map((header) => (
-                            <th
-                              key={header}
-                              className="px-4 py-2 border font-bold"
-                            >
-                              {header}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {data.map((row, index) => (
-                          <tr
-                            key={index}
-                            className="even:bg-blue-200 odd:bg-blue-100"
-                          >
-                            {headers.map((header) => (
-                              <td key={header} className="px-4 py-2 border">
-                                <span className="font-bold">{row[header]}</span>
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  <SubjectCalendar events={user.subjectDates}/>
                 </div>
-              )}
             </div>
           </div>
         </div>
@@ -245,27 +191,6 @@ const Dashboard = () => {
       <button type="button" onClick={signOut}>
         Sign Out
       </button>
-      <h2>Notice Board</h2>
-            <table className="notice-table">
-                <thead>
-                    <tr>
-                        {/* <th>ID</th>
-                        <th>Title</th>
-                        <th>Date</th> */}
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {notices.notice.map((notice) => (
-                        <tr key={notice.noticeId}>
-                            {/* <td>{notice.id}</td>
-                            <td>{notice.title}</td>
-                            <td>{notice.date}</td> */}
-                            <td>{notice.noticeDescription}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
     </div>
   );
 };

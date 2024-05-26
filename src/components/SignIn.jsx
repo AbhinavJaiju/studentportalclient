@@ -10,6 +10,7 @@ import { storeTokenInLocalStorage } from '../lib/common';
 const SignIn = () => {
   const navigate = useNavigate();
   const { user, authenticated } = useUser();
+  const [error, setError] = useState();
   // if (user || authenticated) {
   //   navigate(APP_ROUTES.DASHBOARD)
   // }
@@ -29,12 +30,17 @@ const SignIn = () => {
           password
         }
       });
+      console.log(response.status)
+      if(response.status === 400){
+        setError(response.data.msg)
+      }
       if (!response?.data?.token) {
         console.log('Something went wrong during signing in: ', response);
         return;
       }
       storeTokenInLocalStorage(response.data.token);
       navigate(APP_ROUTES.DASHBOARD)
+
     }
     catch (err) {
       console.log('Some error occured during signing in: ', err);
@@ -81,6 +87,9 @@ const SignIn = () => {
               SIGN IN
             </span>
           </button>
+        </div>
+        <div>
+          <span>{error}</span>
         </div>
         <div className="text-center text-sm">
           Not a User?

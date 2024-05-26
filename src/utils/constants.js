@@ -10,6 +10,7 @@ export const API_ROUTES = {
   UPDATE_NOTICE : `${API_URL}/update`,
   CREATE_REQUEST : `${API_URL}/request`,
   GET_NOTICE : `${API_URL}/getnotice`,
+  CREATE_SUBJECT_DATE :`${API_URL}/createSubjectDate`,
 }
 
 export const APP_ROUTES = {
