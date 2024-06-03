@@ -558,3 +558,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.request{
+  background: beige;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 2rem;
+}
+.signout{
+  background-color: #ee2a2a;
+}

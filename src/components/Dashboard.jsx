@@ -165,8 +165,8 @@ const Dashboard = () => {
 
       <div>
         <h2>Send Request to Admin</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
+        <form onSubmit={handleSubmit} className="request">
+          <div >
             <label htmlFor="title">Title:</label>
             <input
               type="text"
@@ -188,7 +188,7 @@ const Dashboard = () => {
           <button type="submit">Send Request</button>
         </form>
       </div>
-      <button type="button" onClick={signOut}>
+      <button type="button" className="signout" onClick={signOut}>
         Sign Out
       </button>
     </div>
