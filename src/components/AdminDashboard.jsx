@@ -146,33 +146,21 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="admin-dashboard">
-      <div className="admin-details">
+<div className={styles.adminDashboard}>
+      <div className={styles.adminDetails}>
         <h2>Admin Details</h2>
-        <p>
-          <strong>Name:</strong> {user.admin.adminName}
-        </p>
-        <p>
-          <strong>Email:</strong> {user.admin.adminEmail}
-        </p>
-        <p>
-          <strong>ID:</strong> {user.admin.adminId}
-        </p>
-        <p>
-          <strong>Slug:</strong> {user.admin.adminSlug}
-        </p>
+        <p><strong>Name:</strong> {user.admin.adminName}</p>
+        <p><strong>Email:</strong> {user.admin.adminEmail}</p>
+        <p><strong>ID:</strong> {user.admin.adminId}</p>
+        <p><strong>Slug:</strong> {user.admin.adminSlug}</p>
       </div>
 
       <div className={styles.studentDetails}>
         <h2>Student Details</h2>
         {user.admin.studentDetails.map((student, index) => (
           <div key={index} className={styles.studentCard}>
-            <p>
-              <strong>First Name:</strong> {student.firstname}
-            </p>
-            <p>
-              <strong>Email:</strong> {student.email_Id}
-            </p>
+            <p><strong>First Name:</strong> {student.firstname}</p>
+            <p><strong>Email:</strong> {student.email_Id}</p>
             <div className={styles.addTimetable}>
               <h3>Add Timetable for {student.firstname}</h3>
               <button onClick={() => openModal(student)}>Add Timetable</button>
@@ -189,14 +177,14 @@ const AdminDashboard = () => {
         )}
       </div>
 
-      <div className="notice-upload">
+      <div className={styles.noticeUpload}>
         <h2>Upload Notice</h2>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="id">ID:</label>
             <input type="number" id="id" value={noticeCount + 1} readOnly />
           </div>
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="content">Content:</label>
             <textarea
               id="content"
@@ -209,40 +197,19 @@ const AdminDashboard = () => {
           <button type="button" onClick={handleToggle}>
             {toggleState ? "Set to False" : "Set to True"}
           </button>
-          <p>
-            <strong>Toggle State:</strong> {toggleState.toString()}
-          </p>
+          <p><strong>Toggle State:</strong> {toggleState.toString()}</p>
 
           <button type="submit" disabled={loading}>
             {loading ? "Uploading..." : "Upload Notice"}
           </button>
         </form>
-        {message && <p className="message">{message}</p>}
+        {message && <p className={styles.message}>{message}</p>}
       </div>
 
-      {/* {lastNotice && (
-        <div className="last-notice">
-          <h2>Last Notice</h2>
-          <p>
-            <strong>ID:</strong> {lastNotice.noticeId}
-          </p>
-          <p>
-            <strong>Description:</strong> {lastNotice.noticeDescription}
-          </p>
-          <button onClick={() => handlePublish(lastNotice.noticeId, lastNotice.id)}>
-            Publish
-          </button>
-          <button onClick={() => handleDelete(lastNotice.noticeId, lastNotice.id)}>
-            Delete
-          </button>
-        </div>
-      )} */}
-
-      {/* notice table */}
       {user.admin.notices && user.admin.notices.length > 0 && (
-        <div className="notice-list">
+        <div className={styles.noticeList}>
           <h2>Notices</h2>
-          <table className="notice-table">
+          <table className={styles.noticeTable}>
             <thead>
               <tr>
                 <th>Notice ID</th>
@@ -261,9 +228,7 @@ const AdminDashboard = () => {
                     <button onClick={() => handleToggleActive(notice)}>
                       {notice.active ? "Deactivate" : "Activate"}
                     </button>
-                    <button
-                      onClick={() => handleDelete(notice.noticeId, notice.id)}
-                    >
+                    <button onClick={() => handleDelete(notice.noticeId, notice.id)}>
                       Delete
                     </button>
                   </td>
@@ -275,7 +240,7 @@ const AdminDashboard = () => {
       )}
 
       <h2>Requests</h2>
-      <table>
+      <table className={styles.requestTable}>
         <thead>
           <tr>
             <th>Title</th>
@@ -284,7 +249,6 @@ const AdminDashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {console.log(user.admin.requests)}
           {user.admin.requests.map((request) => (
             <tr key={request.id}>
               <td>{request.requestTitle}</td>
@@ -294,7 +258,7 @@ const AdminDashboard = () => {
           ))}
         </tbody>
       </table>
-      <button type="button" onClick={signOut}>
+      <button type="button" className={styles.signOutButton} onClick={signOut}>
         Sign Out
       </button>
     </div>

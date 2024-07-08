@@ -7,6 +7,7 @@ import { API_ROUTES } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import NoticeBoard from "./NoticeBoard";
 import SubjectCalendar from "./CalenderComponent";
+import styles from "../styles/studentDashboard.module.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -111,86 +112,76 @@ const Dashboard = () => {
         notices.notice.map((notice) => <NoticeBoard notices={notice} />)}
       <div className="text-4xl mb-8 font-bold text-white">Dashboard</div>
       {user && (
-        <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="px-6 py-4">
-            <div className="text-xl font-bold text-gray-900 mb-4">
-              User Details
-            </div>
-            <div className="text-gray-700 text-base">
-              <div class="card shadow-sm">
-                <div class="card-header bg-transparent text-center">
-                  <img
-                    class="profile_img"
-                    src="https://placeimg.com/640/480/arch/any"
-                    alt=""
-                  />
-                  <h3>{user.firstname}</h3>
-                </div>
-                <div class="card-body">
-                  <p class="mb-0">
-                    <strong class="pr-1">Student ID:</strong>
-                    {user.studentId}
-                  </p>
-                  <p class="mb-0">
-                    <strong class="pr-1">Last Name:</strong>
-                    {user.lastname}
-                  </p>
-                  <p class="mb-0">
-                    <strong class="pr-1">Email ID:</strong>
-                    {user.email_Id}
-                  </p>
-                  <p class="mb-0">
-                    <strong class="pr-1">Contact Number:</strong>{" "}
-                    {user.contactNumber}
-                  </p>
-                  <p class="mb-0">
-                    <strong class="pr-1">Nationality:</strong>
-                    {user.nationality}
-                  </p>
-                  <p class="mb-0">
-                    <strong class="pr-1">Section:</strong>A
-                  </p>
-                </div>
+        <>
+          <div className={styles.userDetailsContainer}>
+            <div className={styles.card}>
+              <div className={styles.cardHeader}>
+                <img
+                  className={styles.profileImg}
+                  src="https://placeimg.com/640/480/arch/any"
+                  alt=""
+                />
+                <h3>{user.firstname}</h3>
               </div>
-                <div className="p-4 bg-blue-100 min-h-screen">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-800">
-                    TimeTable
-                  </h2>
-                  <SubjectCalendar events={user.subjectDates}/>
-                </div>
+              <div className={styles.cardBody}>
+                <p>
+                  <strong>Student ID:</strong> {user.studentId}
+                </p>
+                <p>
+                  <strong>Last Name:</strong> {user.lastname}
+                </p>
+                <p>
+                  <strong>Email ID:</strong> {user.email_Id}
+                </p>
+                <p>
+                  <strong>Contact Number:</strong> {user.contactNumber}
+                </p>
+                <p>
+                  <strong>Nationality:</strong> {user.nationality}
+                </p>
+                <p>
+                  <strong>Section:</strong> A
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+          <div className={styles.timetable}>
+            <h2>TimeTable</h2>
+            <SubjectCalendar events={user.subjectDates} />
+          </div>
+        </>
       )}
 
-      <div>
-        <h2>Send Request to Admin</h2>
-        <form onSubmit={handleSubmit} className="request">
-          <div >
-            <label htmlFor="title">Title:</label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="description">Description:</label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            ></textarea>
-          </div>
-          <button type="submit">Send Request</button>
-        </form>
-      </div>
-      <button type="button" className="signout" onClick={signOut}>
+<div className={styles.container}>
+      <h2 className={styles.heading}>Send Request to Admin</h2>
+      <form onSubmit={handleSubmit} className={styles.requestForm}>
+        <div className={styles.formGroup}>
+          <label htmlFor="title" className={styles.label}>Title:</label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label htmlFor="description" className={styles.label}>Description:</label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            className={styles.textarea}
+          ></textarea>
+        </div>
+        <button type="submit" className={styles.submitButton}>Send Request</button>
+      </form>
+      <button type="button" className={styles.signoutButton} onClick={signOut}>
         Sign Out
       </button>
+    </div>
     </div>
   );
 };

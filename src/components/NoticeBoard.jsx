@@ -1,15 +1,15 @@
 import React from "react";
-import "../styles/NoticeBoard.module.css"; // Make sure to import the CSS file
+import styles from '../styles/NoticeBoard.module.css';
 
 const NoticeBoard = ({ notices }) => {
   return (
-    <div className="notice-board-container">
-      <div className="notice-board-content">
-        <table className="notice-table">
+    <div className={styles.noticeBoardContainer}>
+      <div className={styles.noticeBoardContent}>
+        <table className={styles.noticeTable}>
           <tbody>
-            <tr key={notices.noticeId}>
-              <td>{notices.noticeDescription}</td>
-            </tr>
+              <tr key={notices.noticeId} className={styles.noticeRow}>
+                <td className={styles.noticeDescription}>{notices.noticeDescription}</td>
+              </tr>
           </tbody>
         </table>
       </div>
